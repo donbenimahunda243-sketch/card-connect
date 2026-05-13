@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Personnel - Card Connect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+overflow-x:hidden;
+}
+
+/* DECORS */
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(37,99,235,0.08);
+border-radius:50%;
+filter:blur(120px);
+top:-150px;
+right:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(30,58,138,0.08);
+border-radius:50%;
+filter:blur(120px);
+bottom:-150px;
+left:-150px;
+z-index:-1;
+}
+
+/* CONTAINER */
+
+.container{
+padding:40px;
+max-width:1200px;
+margin:auto;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+.logo{
+font-size:32px;
+font-weight:700;
+color:#2563eb;
+}
+
+.company-badge{
+background:#2563eb;
+color:white;
+padding:12px 20px;
+border-radius:14px;
+font-weight:600;
+}
+
+/* PROFILE */
+
+.profile-card{
+background:white;
+border-radius:30px;
+padding:40px;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+display:grid;
+grid-template-columns:350px 1fr;
+gap:40px;
+animation:fadeUp 0.8s ease;
+}
+
+.left{
+text-align:center;
+}
+
+.avatar{
+width:220px;
+height:220px;
+border-radius:50%;
+object-fit:cover;
+border:8px solid #eff6ff;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-bottom:25px;
+}
+
+.employee-name{
+font-size:32px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.employee-position{
+color:#64748b;
+margin-bottom:25px;
+}
+
+.status{
+display:inline-block;
+padding:12px 22px;
+border-radius:50px;
+font-weight:600;
+background:#dcfce7;
+color:#16a34a;
+}
+
+.right h2{
+margin-bottom:25px;
+font-size:30px;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:40px;
+}
+
+.info-card{
+background:#f8fafc;
+padding:25px;
+border-radius:20px;
+}
+
+.info-card i{
+font-size:32px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.info-card h4{
+margin-bottom:10px;
+}
+
+/* ACTIONS */
+
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.btn{
+padding:15px 25px;
+border:none;
+border-radius:14px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+font-family:'Poppins',sans-serif;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.primary:hover{
+background:#1e3a8a;
+transform:translateY(-2px);
+}
+
+.success{
+background:#dcfce7;
+color:#16a34a;
+}
+
+.danger{
+background:#fee2e2;
+color:#dc2626;
+}
+
+/* HISTORY */
+
+.history{
+margin-top:40px;
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.history h3{
+margin-bottom:25px;
+}
+
+.history-item{
+display:flex;
+align-items:center;
+gap:20px;
+padding:18px;
+border-bottom:1px solid #e2e8f0;
+}
+
+.history-item i{
+font-size:22px;
+color:#2563eb;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.profile-card{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:20px;
+}
+
+.actions{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">CARD CONNECT</div>
+
+<div class="company-badge">
+Entreprise Connectée
+</div>
+
+</div>
+
+<!-- PROFILE -->
+
+<div class="profile-card">
+
+<!-- LEFT -->
+
+<div class="left">
+
+<img id="employeePhoto" class="avatar">
+
+<div class="employee-name" id="employeeName">
+Chargement...
+</div>
+
+<div class="employee-position" id="employeePosition">
+Chargement...
+</div>
+
+<div class="status" id="employeeStatus">
+Chargement...
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right">
+
+<h2>Informations du personnel</h2>
+
+<div class="info-grid" id="infoGrid">
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary" onclick="markPresent()">
+<i class="fa-solid fa-check"></i>
+ Personnel présent
+</button>
+
+<a id="phoneBtn">
+<button class="btn success">
+<i class="fa-solid fa-phone"></i>
+ Contacter
+</button>
+</a>
+
+<button class="btn danger">
+<i class="fa-solid fa-shield"></i>
+ Sécurité
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="history">
+
+<h3>Historique des activités</h3>
+
+<div class="history-item">
+<i class="fa-solid fa-qrcode"></i>
+<div>
+<strong>Carte scannée</strong>
+<p>Aujourd'hui - 08:10</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-building"></i>
+<div>
+<strong>Accès entreprise</strong>
+<p>Aujourd'hui - 08:15</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-user-check"></i>
+<div>
+<strong>Statut actuel</strong>
+<p id="historyStatus">Chargement...</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const employeeId = params.get('id');
+
+let employees = JSON.parse(localStorage.getItem('employees')) || [];
+
+const employee = employees.find(e => e.id === employeeId);
+
+if(employee){
+
+document.getElementById('employeePhoto').src = employee.photo;
+
+document.getElementById('employeeName').innerHTML = employee.name;
+
+document.getElementById('employeePosition').innerHTML = employee.position;
+
+document.getElementById('employeeStatus').innerHTML = employee.status;
+
+document.getElementById('historyStatus').innerHTML = employee.status;
+
+document.getElementById('infoGrid').innerHTML = `
+
+<div class="info-card">
+<i class="fa-solid fa-building"></i>
+<h4>Département</h4>
+<p>${employee.department}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-briefcase"></i>
+<h4>Fonction</h4>
+<p>${employee.position}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-phone"></i>
+<h4>Téléphone</h4>
+<p>${employee.phone}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-envelope"></i>
+<h4>Email</h4>
+<p>${employee.email}</p>
+</div>
+
+`;
+
+document.getElementById('phoneBtn').href =
+`tel:${employee.phone}`;
+
+if(employee.status === 'Actif'){
+
+document.getElementById('employeeStatus').style.background = '#dcfce7';
+document.getElementById('employeeStatus').style.color = '#16a34a';
+
+}
+
+if(employee.status === 'Absent'){
+
+document.getElementById('employeeStatus').style.background = '#fee2e2';
+document.getElementById('employeeStatus').style.color = '#dc2626';
+
+}
+
+if(employee.status === 'En mission'){
+
+document.getElementById('employeeStatus').style.background = '#fef3c7';
+document.getElementById('employeeStatus').style.color = '#d97706';
+
+}
+
+}
+
+function markPresent(){
+
+const status = document.getElementById('employeeStatus');
+
+const history = document.getElementById('historyStatus');
+
+status.innerHTML = 'Actif';
+
+status.style.background = '#dcfce7';
+
+status.style.color = '#16a34a';
+
+history.innerHTML = 'Personnel actif et présent';
+
+if(employee){
+
+employee.status = 'Actif';
+
+const updatedEmployees = employees.map(e =>
+e.id === employee.id ? employee : e
+);
+
+localStorage.setItem('employees', JSON.stringify(updatedEmployees));
+
+}
+
+alert('Le statut du personnel a été synchronisé avec le dashboard entreprise.');
+
+}
+
+</script>
+
+</body>
+</html>

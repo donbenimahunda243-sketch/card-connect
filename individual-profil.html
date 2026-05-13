@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Individuel - Card Connect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+overflow-x:hidden;
+}
+
+/* DECORS */
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(37,99,235,0.08);
+border-radius:50%;
+filter:blur(120px);
+top:-150px;
+right:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(30,58,138,0.08);
+border-radius:50%;
+filter:blur(120px);
+bottom:-150px;
+left:-150px;
+z-index:-1;
+}
+
+/* CONTAINER */
+
+.container{
+padding:40px;
+max-width:1200px;
+margin:auto;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+.logo{
+font-size:32px;
+font-weight:700;
+color:#2563eb;
+}
+
+.profile-badge{
+background:#2563eb;
+color:white;
+padding:12px 20px;
+border-radius:14px;
+font-weight:600;
+}
+
+/* PROFILE CARD */
+
+.profile-card{
+background:white;
+border-radius:30px;
+padding:40px;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+display:grid;
+grid-template-columns:350px 1fr;
+gap:40px;
+animation:fadeUp 0.8s ease;
+}
+
+/* LEFT */
+
+.left{
+text-align:center;
+}
+
+.avatar{
+width:220px;
+height:220px;
+border-radius:50%;
+object-fit:cover;
+border:8px solid #eff6ff;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-bottom:25px;
+}
+
+.profile-name{
+font-size:32px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.profile-job{
+color:#64748b;
+margin-bottom:25px;
+}
+
+.status{
+display:inline-block;
+padding:12px 22px;
+border-radius:50px;
+font-weight:600;
+background:#dcfce7;
+color:#16a34a;
+}
+
+/* RIGHT */
+
+.right h2{
+margin-bottom:25px;
+font-size:30px;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:40px;
+}
+
+.info-card{
+background:#f8fafc;
+padding:25px;
+border-radius:20px;
+}
+
+.info-card i{
+font-size:32px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.info-card h4{
+margin-bottom:10px;
+}
+
+/* ACTIONS */
+
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.btn{
+padding:15px 25px;
+border:none;
+border-radius:14px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+font-family:'Poppins',sans-serif;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.primary:hover{
+background:#1e3a8a;
+transform:translateY(-2px);
+}
+
+.success{
+background:#dcfce7;
+color:#16a34a;
+}
+
+.dark{
+background:#111827;
+color:white;
+}
+
+/* HISTORY */
+
+.history{
+margin-top:40px;
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.history h3{
+margin-bottom:25px;
+}
+
+.history-item{
+display:flex;
+align-items:center;
+gap:20px;
+padding:18px;
+border-bottom:1px solid #e2e8f0;
+}
+
+.history-item i{
+font-size:22px;
+color:#2563eb;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.profile-card{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:20px;
+}
+
+.actions{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+CARD CONNECT
+</div>
+
+<div class="profile-badge">
+Profil Digital
+</div>
+
+</div>
+
+<!-- PROFILE CARD -->
+
+<div class="profile-card">
+
+<!-- LEFT -->
+
+<div class="left">
+
+<img id="profilePhoto" class="avatar">
+
+<div class="profile-name" id="profileName">
+Chargement...
+</div>
+
+<div class="profile-job" id="profileJob">
+Chargement...
+</div>
+
+<div class="status">
+Profil Vérifié
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right">
+
+<h2>Informations personnelles</h2>
+
+<div class="info-grid">
+
+<div class="info-card">
+<i class="fa-solid fa-phone"></i>
+<h4>Téléphone</h4>
+<p id="profilePhone"></p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-envelope"></i>
+<h4>Email</h4>
+<p id="profileEmail"></p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-location-dot"></i>
+<h4>Adresse</h4>
+<p id="profileAddress"></p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-user-shield"></i>
+<h4>Contact Urgence</h4>
+<p id="profileEmergency"></p>
+</div>
+
+</div>
+
+<div class="actions">
+
+<a id="whatsappBtn" target="_blank">
+<button class="btn success">
+<i class="fa-brands fa-whatsapp"></i>
+ WhatsApp
+</button>
+</a>
+
+<a id="callBtn">
+<button class="btn primary">
+<i class="fa-solid fa-phone"></i>
+ Appeler
+</button>
+</a>
+
+<button class="btn dark">
+<i class="fa-solid fa-share-nodes"></i>
+ Partager Profil
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="history">
+
+<h3>Historique Card Connect</h3>
+
+<div class="history-item">
+<i class="fa-solid fa-qrcode"></i>
+<div>
+<strong>Carte scannée</strong>
+<p>Aujourd'hui - 09:15</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-id-card"></i>
+<div>
+<strong>Profil consulté</strong>
+<p>Aujourd'hui - 09:17</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-shield-halved"></i>
+<div>
+<strong>Profil sécurisé</strong>
+<p>Protection Card Connect active</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const profileId = params.get('id');
+
+const individual = JSON.parse(localStorage.getItem('individualProfile'));
+
+if(individual && individual.id === profileId){
+
+document.getElementById('profilePhoto').src = individual.photo;
+
+document.getElementById('profileName').innerHTML = individual.name;
+
+document.getElementById('profileJob').innerHTML = individual.job;
+
+document.getElementById('profilePhone').innerHTML = individual.phone;
+
+document.getElementById('profileEmail').innerHTML = individual.email;
+
+document.getElementById('profileAddress').innerHTML = individual.address;
+
+document.getElementById('profileEmergency').innerHTML = individual.emergency;
+
+document.getElementById('callBtn').href =
+`tel:${individual.phone}`;
+
+document.getElementById('whatsappBtn').href =
+`https://wa.me/${individual.phone.replace(/\s+/g,'')}`;
+
+}
+
+</script>
+
+</body>
+</html>

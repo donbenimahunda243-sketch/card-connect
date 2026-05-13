@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Élève - Card Connect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(37,99,235,0.08);
+border-radius:50%;
+filter:blur(120px);
+top:-150px;
+right:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(30,58,138,0.08);
+border-radius:50%;
+filter:blur(120px);
+bottom:-150px;
+left:-150px;
+z-index:-1;
+}
+
+.container{
+padding:40px;
+max-width:1200px;
+margin:auto;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+.logo{
+font-size:32px;
+font-weight:700;
+color:#2563eb;
+}
+
+.school-badge{
+background:#2563eb;
+color:white;
+padding:12px 20px;
+border-radius:14px;
+font-weight:600;
+}
+
+.profile-card{
+background:white;
+border-radius:30px;
+padding:40px;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+display:grid;
+grid-template-columns:350px 1fr;
+gap:40px;
+animation:fadeUp 0.8s ease;
+}
+
+.left{
+text-align:center;
+}
+
+.avatar{
+width:220px;
+height:220px;
+border-radius:50%;
+object-fit:cover;
+border:8px solid #eff6ff;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-bottom:25px;
+}
+
+.student-name{
+font-size:32px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.student-class{
+color:#64748b;
+margin-bottom:25px;
+}
+
+.status{
+display:inline-block;
+padding:12px 22px;
+border-radius:50px;
+font-weight:600;
+background:#fef3c7;
+color:#d97706;
+}
+
+.right h2{
+margin-bottom:25px;
+font-size:30px;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:40px;
+}
+
+.info-card{
+background:#f8fafc;
+padding:25px;
+border-radius:20px;
+}
+
+.info-card i{
+font-size:32px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.info-card h4{
+margin-bottom:10px;
+}
+
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.btn{
+padding:15px 25px;
+border:none;
+border-radius:14px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+font-family:'Poppins',sans-serif;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.primary:hover{
+background:#1e3a8a;
+transform:translateY(-2px);
+}
+
+.success{
+background:#dcfce7;
+color:#16a34a;
+}
+
+.danger{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.history{
+margin-top:40px;
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.history h3{
+margin-bottom:25px;
+}
+
+.history-item{
+display:flex;
+align-items:center;
+gap:20px;
+padding:18px;
+border-bottom:1px solid #e2e8f0;
+}
+
+.history-item i{
+font-size:22px;
+color:#2563eb;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@media(max-width:900px){
+
+.profile-card{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:20px;
+}
+
+.actions{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="topbar">
+<div class="logo">CARD CONNECT</div>
+<div class="school-badge">AKILI SCIENCE ACADEMY</div>
+</div>
+
+<div class="profile-card">
+
+<div class="left">
+
+<img id="studentPhoto" class="avatar">
+
+<div class="student-name" id="studentName">
+Chargement...
+</div>
+
+<div class="student-class" id="studentClass">
+Chargement...
+</div>
+
+<div class="status" id="studentStatus">
+Chargement...
+</div>
+
+</div>
+
+<div class="right">
+
+<h2>Informations de l'élève</h2>
+
+<div class="info-grid" id="infoGrid">
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary" onclick="markRetrieved()">
+<i class="fa-solid fa-check"></i>
+ Élève retiré
+</button>
+
+<a id="whatsappBtn" target="_blank">
+<button class="btn success">
+<i class="fa-brands fa-whatsapp"></i>
+ Contacter Parent
+</button>
+</a>
+
+<button class="btn danger">
+<i class="fa-solid fa-triangle-exclamation"></i>
+ Urgence
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="history">
+
+<h3>Historique des activités</h3>
+
+<div class="history-item">
+<i class="fa-solid fa-qrcode"></i>
+<div>
+<strong>Carte scannée</strong>
+<p>Aujourd'hui - 07:45</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-school"></i>
+<div>
+<strong>Entrée à l'école</strong>
+<p>Aujourd'hui - 07:50</p>
+</div>
+</div>
+
+<div class="history-item">
+<i class="fa-solid fa-user-check"></i>
+<div>
+<strong>Statut actuel</strong>
+<p id="historyStatus">Chargement...</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const studentId = params.get('id');
+
+let students = JSON.parse(localStorage.getItem('students')) || [];
+
+const student = students.find(s => s.id === studentId);
+
+if(student){
+
+document.getElementById('studentName').innerHTML = student.name;
+
+document.getElementById('studentClass').innerHTML = student.classroom;
+
+document.getElementById('studentStatus').innerHTML = student.status;
+
+document.getElementById('historyStatus').innerHTML = student.status;
+
+document.getElementById('studentPhoto').src = student.photo;
+
+document.getElementById('infoGrid').innerHTML = `
+
+<div class="info-card">
+<i class="fa-solid fa-phone"></i>
+<h4>Contact Parent</h4>
+<p>${student.parentPhone}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-location-dot"></i>
+<h4>Adresse</h4>
+<p>${student.address}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-id-card"></i>
+<h4>ID Élève</h4>
+<p>${student.studentCode}</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-user-shield"></i>
+<h4>Sécurité</h4>
+<p>Profil sécurisé Card Connect</p>
+</div>
+
+`;
+
+document.getElementById('whatsappBtn').href =
+`https://wa.me/${student.parentPhone.replace(/\s/g,'')}`;
+
+if(student.status === 'Retiré'){
+
+document.getElementById('studentStatus').style.background = '#dcfce7';
+
+document.getElementById('studentStatus').style.color = '#16a34a';
+
+}else{
+
+document.getElementById('studentStatus').style.background = '#fef3c7';
+
+document.getElementById('studentStatus').style.color = '#d97706';
+
+}
+
+}
+
+function markRetrieved(){
+
+const status = document.getElementById('studentStatus');
+
+const history = document.getElementById('historyStatus');
+
+status.innerHTML = 'Retiré';
+
+status.style.background = '#dcfce7';
+
+status.style.color = '#16a34a';
+
+history.innerHTML = 'Élève retiré avec succès';
+
+if(student){
+
+student.status = 'Retiré';
+
+const updatedStudents = students.map(s =>
+s.id === student.id ? student : s
+);
+
+localStorage.setItem('students', JSON.stringify(updatedStudents));
+
+}
+
+alert('Le statut de l’élève a été mis à jour automatiquement dans le dashboard.');
+
+}
+
+</script>
+
+</body>
+</html>

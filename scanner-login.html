@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanner Login - Card Connect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+overflow-x:hidden;
+}
+
+/* DECORS */
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(37,99,235,0.08);
+border-radius:50%;
+filter:blur(120px);
+top:-150px;
+right:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(30,58,138,0.08);
+border-radius:50%;
+filter:blur(120px);
+bottom:-150px;
+left:-150px;
+z-index:-1;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+background:white;
+box-shadow:0 2px 20px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#2563eb;
+}
+
+/* CONTAINER */
+
+.container{
+min-height:90vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:40px;
+}
+
+.login-box{
+width:100%;
+max-width:1100px;
+background:white;
+border-radius:30px;
+overflow:hidden;
+display:flex;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
+animation:fadeUp 1s ease;
+}
+
+/* LEFT */
+
+.left{
+flex:1;
+background:linear-gradient(135deg,#2563eb,#1e3a8a);
+padding:70px;
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+position:relative;
+overflow:hidden;
+}
+
+.left::before{
+content:'';
+position:absolute;
+width:300px;
+height:300px;
+background:rgba(255,255,255,0.08);
+border-radius:50%;
+top:-100px;
+right:-100px;
+}
+
+.left h1{
+font-size:48px;
+margin-bottom:20px;
+}
+
+.left p{
+line-height:1.8;
+opacity:0.9;
+}
+
+.scan-icon{
+font-size:120px;
+margin-top:40px;
+opacity:0.95;
+animation:float 4s ease-in-out infinite;
+}
+
+/* RIGHT */
+
+.right{
+flex:1;
+padding:70px;
+}
+
+.right h2{
+font-size:34px;
+margin-bottom:15px;
+}
+
+.right p{
+color:#64748b;
+margin-bottom:40px;
+}
+
+/* OPTIONS */
+
+.options{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.option{
+padding:25px;
+border-radius:20px;
+border:1px solid #e2e8f0;
+cursor:pointer;
+transition:0.3s;
+background:white;
+}
+
+.option:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+border-color:#2563eb;
+}
+
+.option i{
+font-size:38px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.option h3{
+margin-bottom:10px;
+}
+
+/* LOGIN FORM */
+
+#loginForm{
+display:none;
+margin-top:40px;
+animation:fadeUp 0.5s ease;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:20px;
+border-radius:12px;
+border:1px solid #cbd5e1;
+font-family:'Poppins',sans-serif;
+font-size:15px;
+outline:none;
+}
+
+input:focus{
+border-color:#2563eb;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:#2563eb;
+color:white;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+font-family:'Poppins',sans-serif;
+}
+
+button:hover{
+background:#1e3a8a;
+}
+
+#message{
+margin-top:15px;
+font-weight:600;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes float{
+0%,100%{
+transform:translateY(0);
+}
+50%{
+transform:translateY(-15px);
+}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.login-box{
+flex-direction:column;
+}
+
+.left,
+.right{
+padding:40px;
+}
+
+.left h1{
+font-size:38px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">CARD CONNECT</div>
+</header>
+
+<div class="container">
+
+<div class="login-box">
+
+<!-- LEFT -->
+
+<div class="left">
+
+<h1>Scanner sécurisé</h1>
+
+<p>
+Connectez-vous avant de scanner une carte Card Connect afin de sécuriser les retraits, les accès et les informations utilisateurs.
+</p>
+
+<div class="scan-icon">
+<i class="fa-solid fa-qrcode"></i>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right">
+
+<h2>Accès Scanner</h2>
+
+<p>
+Choisissez votre espace sécurisé.
+</p>
+
+<div class="options">
+
+<div class="option" onclick="selectRole('school')">
+<i class="fa-solid fa-school"></i>
+<h3>Espace École</h3>
+<p>Scanner sécurisé pour établissements scolaires.</p>
+</div>
+
+<div class="option" onclick="selectRole('company')">
+<i class="fa-solid fa-building"></i>
+<h3>Espace Entreprise</h3>
+<p>Scanner sécurisé pour entreprises.</p>
+</div>
+
+<div class="option" onclick="selectRole('individual')">
+<i class="fa-solid fa-user"></i>
+<h3>Espace Individuel</h3>
+<p>Scanner sécurisé personnel.</p>
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginForm">
+
+<h3 style="margin-bottom:20px;">
+Connexion sécurisée
+</h3>
+
+<input type="email" id="email" placeholder="Adresse email">
+
+<input type="password" id="password" placeholder="Mot de passe">
+
+<button onclick="loginScanner()">
+Connexion au Scanner
+</button>
+
+<p id="message"></p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* SESSION ACTIVE */
+
+const isAuthenticated =
+localStorage.getItem("scannerAuthenticated");
+
+if(isAuthenticated === "true"){
+
+window.location.href = "scanner.html";
+
+}
+
+let currentRole = '';
+
+function selectRole(role){
+
+currentRole = role;
+
+document.getElementById('loginForm').style.display = 'block';
+
+}
+
+function loginScanner(){
+
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;
+
+const message = document.getElementById('message');
+
+/* ECOLE */
+
+if(
+currentRole === 'school' &&
+email === 'admin@akili.com' &&
+password === 'akili123'
+){
+
+message.style.color = 'green';
+message.innerHTML = 'Connexion sécurisée réussie...';
+
+/* SESSION */
+
+localStorage.setItem(
+"scannerAuthenticated",
+"true"
+);
+
+localStorage.setItem(
+"scannerRole",
+"school"
+);
+
+setTimeout(()=>{
+
+window.location.href = 'scanner.html';
+
+},1500);
+
+}
+
+/* ENTREPRISE */
+
+else if(
+currentRole === 'company' &&
+email === 'admin@cardconnect.com' &&
+password === 'company123'
+){
+
+message.style.color = 'green';
+message.innerHTML = 'Connexion entreprise réussie...';
+
+/* SESSION */
+
+localStorage.setItem(
+"scannerAuthenticated",
+"true"
+);
+
+localStorage.setItem(
+"scannerRole",
+"company"
+);
+
+setTimeout(()=>{
+
+window.location.href = 'scanner.html';
+
+},1500);
+
+}
+
+/* INDIVIDUEL */
+
+else if(
+currentRole === 'individual' &&
+email === 'donbeni@cardconnect.com' &&
+password === 'donbeni123'
+){
+
+message.style.color = 'green';
+message.innerHTML = 'Connexion individuelle réussie...';
+
+/* SESSION */
+
+localStorage.setItem(
+"scannerAuthenticated",
+"true"
+);
+
+localStorage.setItem(
+"scannerRole",
+"individual"
+);
+
+setTimeout(()=>{
+
+window.location.href = 'scanner.html';
+
+},1500);
+
+}
+
+else{
+
+message.style.color = 'red';
+message.innerHTML = 'Informations incorrectes';
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

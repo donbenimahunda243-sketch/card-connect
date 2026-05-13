@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Individuel - Card Connect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+overflow-x:hidden;
+}
+
+/* DECORS */
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(37,99,235,0.08);
+border-radius:50%;
+filter:blur(120px);
+top:-150px;
+right:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(30,58,138,0.08);
+border-radius:50%;
+filter:blur(120px);
+bottom:-150px;
+left:-150px;
+z-index:-1;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:260px;
+height:100vh;
+background:linear-gradient(180deg,#2563eb,#1e3a8a);
+color:white;
+padding:30px 20px;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+margin-bottom:50px;
+}
+
+.menu a{
+display:flex;
+align-items:center;
+gap:15px;
+color:white;
+text-decoration:none;
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+transition:0.3s;
+}
+
+.menu a:hover{
+background:rgba(255,255,255,0.12);
+}
+
+/* MAIN */
+
+.main{
+margin-left:260px;
+padding:40px;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+.topbar h1{
+font-size:34px;
+}
+
+/* BTN */
+
+.btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:14px 22px;
+border-radius:14px;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+font-family:'Poppins',sans-serif;
+}
+
+.btn:hover{
+background:#1e3a8a;
+transform:translateY(-2px);
+}
+
+/* PROFILE CARD */
+
+.profile-card{
+background:white;
+padding:40px;
+border-radius:30px;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+display:grid;
+grid-template-columns:300px 1fr;
+gap:40px;
+margin-bottom:40px;
+}
+
+.left{
+text-align:center;
+}
+
+.avatar{
+width:220px;
+height:220px;
+border-radius:50%;
+object-fit:cover;
+border:8px solid #eff6ff;
+margin-bottom:20px;
+}
+
+.left h2{
+margin-bottom:10px;
+}
+
+.badge{
+display:inline-block;
+background:#dcfce7;
+color:#16a34a;
+padding:10px 20px;
+border-radius:50px;
+font-weight:600;
+margin-top:10px;
+}
+
+/* INFO GRID */
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.info-card{
+background:#f8fafc;
+padding:25px;
+border-radius:20px;
+}
+
+.info-card i{
+font-size:30px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.info-card h4{
+margin-bottom:10px;
+}
+
+/* ACTIONS */
+
+.actions{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+/* QR BOX */
+
+.qr-box{
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+margin-top:30px;
+}
+
+.link-box{
+background:#eff6ff;
+padding:15px;
+border-radius:12px;
+margin-top:20px;
+word-break:break-all;
+}
+
+/* MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:1000;
+}
+
+.modal-content{
+background:white;
+padding:40px;
+border-radius:24px;
+width:100%;
+max-width:600px;
+animation:fadeUp 0.5s ease;
+}
+
+.modal-content h2{
+margin-bottom:25px;
+}
+
+input, textarea{
+width:100%;
+padding:15px;
+margin-bottom:20px;
+border-radius:12px;
+border:1px solid #cbd5e1;
+font-family:'Poppins',sans-serif;
+}
+
+textarea{
+resize:none;
+height:100px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
+.profile-card{
+grid-template-columns:1fr;
+}
+
+.actions{
+flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">CARD CONNECT</div>
+
+<div class="menu">
+<a href="#"><i class="fa-solid fa-user"></i> Mon Profil</a>
+<a href="#"><i class="fa-solid fa-id-card"></i> Carte Digitale</a>
+<a href="#"><i class="fa-solid fa-qrcode"></i> QR Smart</a>
+<a href="#"><i class="fa-solid fa-gear"></i> Paramètres</a>
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<div>
+<h1>Espace Individuel</h1>
+<p>Bienvenue sur votre identité numérique Card Connect</p>
+</div>
+
+<button class="btn" onclick="openModal()">
+<i class="fa-solid fa-pen"></i>
+ Modifier Profil
+</button>
+
+</div>
+
+<!-- PROFILE -->
+
+<div class="profile-card">
+
+<div class="left">
+
+<img id="profilePhoto" class="avatar">
+
+<h2 id="profileName">
+Donbeni Mahunda
+</h2>
+
+<p id="profileJob">
+Entrepreneur Digital
+</p>
+
+<div class="badge">
+Profil Vérifié
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="info-grid">
+
+<div class="info-card">
+<i class="fa-solid fa-phone"></i>
+<h4>Téléphone</h4>
+<p id="profilePhone">
++243 000 000 000
+</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-envelope"></i>
+<h4>Email</h4>
+<p id="profileEmail">
+contact@email.com
+</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-location-dot"></i>
+<h4>Adresse</h4>
+<p id="profileAddress">
+Kinshasa, RDC
+</p>
+</div>
+
+<div class="info-card">
+<i class="fa-solid fa-user-shield"></i>
+<h4>Urgence</h4>
+<p id="profileEmergency">
++243 000 000 000
+</p>
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn" onclick="generateLink()">
+<i class="fa-solid fa-link"></i>
+ Générer mon lien
+</button>
+
+<button class="btn" onclick="openProfile()">
+<i class="fa-solid fa-eye"></i>
+ Voir mon profil
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- QR -->
+
+<div class="qr-box">
+
+<h2>Mon lien Card Connect</h2>
+
+<div class="link-box" id="profileLink">
+Aucun lien généré
+</div>
+
+</div>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modal-content">
+
+<h2>Modifier Profil</h2>
+
+<input type="file" id="photoInput" accept="image/*">
+
+<input type="text" id="nameInput" placeholder="Nom complet">
+
+<input type="text" id="jobInput" placeholder="Profession">
+
+<input type="text" id="phoneInput" placeholder="Téléphone">
+
+<input type="email" id="emailInput" placeholder="Email">
+
+<input type="text" id="addressInput" placeholder="Adresse">
+
+<input type="text" id="emergencyInput" placeholder="Contact urgence">
+
+<button class="btn" onclick="saveProfile()">
+Enregistrer
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let individual = JSON.parse(localStorage.getItem('individualProfile')) || {
+
+name:"Donbeni Mahunda",
+job:"Entrepreneur Digital",
+phone:"+243 000 000 000",
+email:"contact@email.com",
+address:"Kinshasa, RDC",
+emergency:"+243 000 000 000",
+photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop",
+id:"individual001"
+
+};
+
+function renderProfile(){
+
+document.getElementById('profileName').innerHTML = individual.name;
+
+document.getElementById('profileJob').innerHTML = individual.job;
+
+document.getElementById('profilePhone').innerHTML = individual.phone;
+
+document.getElementById('profileEmail').innerHTML = individual.email;
+
+document.getElementById('profileAddress').innerHTML = individual.address;
+
+document.getElementById('profileEmergency').innerHTML = individual.emergency;
+
+document.getElementById('profilePhoto').src = individual.photo;
+
+}
+
+function openModal(){
+
+document.getElementById('modal').style.display = 'flex';
+
+}
+
+window.onclick = function(e){
+
+if(e.target == document.getElementById('modal')){
+
+document.getElementById('modal').style.display = 'none';
+
+}
+
+}
+
+function saveProfile(){
+
+const file = document.getElementById('photoInput').files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = function(){
+
+individual.photo = reader.result;
+
+finishSave();
+
+}
+
+reader.readAsDataURL(file);
+
+}else{
+
+finishSave();
+
+}
+
+}
+
+function finishSave(){
+
+individual.name = document.getElementById('nameInput').value || individual.name;
+
+individual.job = document.getElementById('jobInput').value || individual.job;
+
+individual.phone = document.getElementById('phoneInput').value || individual.phone;
+
+individual.email = document.getElementById('emailInput').value || individual.email;
+
+individual.address = document.getElementById('addressInput').value || individual.address;
+
+individual.emergency = document.getElementById('emergencyInput').value || individual.emergency;
+
+localStorage.setItem('individualProfile', JSON.stringify(individual));
+
+renderProfile();
+
+document.getElementById('modal').style.display = 'none';
+
+}
+
+function generateLink(){
+
+const link = `individual-profile.html?id=${individual.id}`;
+
+document.getElementById('profileLink').innerHTML = link;
+
+}
+
+function openProfile(){
+
+window.location.href = `individual-profile.html?id=${individual.id}`;
+
+}
+
+renderProfile();
+
+</script>
+
+</body>
+</html>
