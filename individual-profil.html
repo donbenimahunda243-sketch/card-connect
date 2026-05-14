@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Profil Individuel - Card Connect</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
@@ -20,9 +22,10 @@ body{
 font-family:'Poppins',sans-serif;
 background:#f8fafc;
 overflow-x:hidden;
+color:#111827;
 }
 
-/* DECORS */
+/* BACKGROUND */
 
 body::before{
 content:'';
@@ -65,10 +68,24 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:40px;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .logo{
-font-size:32px;
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo img{
+width:55px;
+height:55px;
+object-fit:contain;
+}
+
+.logo-text{
+font-size:30px;
 font-weight:700;
 color:#2563eb;
 }
@@ -76,22 +93,26 @@ color:#2563eb;
 .profile-badge{
 background:#2563eb;
 color:white;
-padding:12px 20px;
+padding:12px 22px;
 border-radius:14px;
 font-weight:600;
+display:flex;
+align-items:center;
+gap:10px;
 }
 
 /* PROFILE CARD */
 
 .profile-card{
 background:white;
-border-radius:30px;
+border-radius:35px;
 padding:40px;
-box-shadow:0 20px 60px rgba(0,0,0,0.05);
+box-shadow:0 20px 60px rgba(0,0,0,0.06);
 display:grid;
 grid-template-columns:350px 1fr;
 gap:40px;
 animation:fadeUp 0.8s ease;
+border:1px solid rgba(37,99,235,0.08);
 }
 
 /* LEFT */
@@ -101,8 +122,8 @@ text-align:center;
 }
 
 .avatar{
-width:220px;
-height:220px;
+width:230px;
+height:230px;
 border-radius:50%;
 object-fit:cover;
 border:8px solid #eff6ff;
@@ -111,7 +132,7 @@ margin-bottom:25px;
 }
 
 .profile-name{
-font-size:32px;
+font-size:34px;
 font-weight:700;
 margin-bottom:10px;
 }
@@ -119,6 +140,7 @@ margin-bottom:10px;
 .profile-job{
 color:#64748b;
 margin-bottom:25px;
+font-size:17px;
 }
 
 .status{
@@ -134,12 +156,12 @@ color:#16a34a;
 
 .right h2{
 margin-bottom:25px;
-font-size:30px;
+font-size:32px;
 }
 
 .info-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:20px;
 margin-bottom:40px;
 }
@@ -147,7 +169,14 @@ margin-bottom:40px;
 .info-card{
 background:#f8fafc;
 padding:25px;
-border-radius:20px;
+border-radius:22px;
+transition:0.3s;
+border:1px solid #e2e8f0;
+}
+
+.info-card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
 .info-card i{
@@ -158,6 +187,12 @@ margin-bottom:15px;
 
 .info-card h4{
 margin-bottom:10px;
+font-size:18px;
+}
+
+.info-card p{
+color:#64748b;
+line-height:1.7;
 }
 
 /* ACTIONS */
@@ -171,11 +206,16 @@ gap:20px;
 .btn{
 padding:15px 25px;
 border:none;
-border-radius:14px;
+border-radius:16px;
 font-weight:600;
 cursor:pointer;
 transition:0.3s;
 font-family:'Poppins',sans-serif;
+font-size:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
 }
 
 .primary{
@@ -185,7 +225,7 @@ color:white;
 
 .primary:hover{
 background:#1e3a8a;
-transform:translateY(-2px);
+transform:translateY(-3px);
 }
 
 .success{
@@ -193,9 +233,30 @@ background:#dcfce7;
 color:#16a34a;
 }
 
+.success:hover{
+transform:translateY(-3px);
+}
+
 .dark{
 background:#111827;
 color:white;
+}
+
+.dark:hover{
+transform:translateY(-3px);
+background:#000;
+}
+
+/* VISITOR MODE */
+
+.visitor-warning{
+margin-top:25px;
+padding:18px;
+background:#fef3c7;
+color:#92400e;
+border-radius:18px;
+font-weight:500;
+display:none;
 }
 
 /* HISTORY */
@@ -206,10 +267,12 @@ background:white;
 padding:30px;
 border-radius:25px;
 box-shadow:0 10px 30px rgba(0,0,0,0.05);
+border:1px solid rgba(37,99,235,0.08);
 }
 
 .history h3{
 margin-bottom:25px;
+font-size:26px;
 }
 
 .history-item{
@@ -220,9 +283,22 @@ padding:18px;
 border-bottom:1px solid #e2e8f0;
 }
 
+.history-item:last-child{
+border-bottom:none;
+}
+
 .history-item i{
 font-size:22px;
 color:#2563eb;
+}
+
+/* FOOTER */
+
+.footer{
+margin-top:40px;
+text-align:center;
+color:#64748b;
+padding-bottom:20px;
 }
 
 /* ANIMATION */
@@ -232,7 +308,6 @@ from{
 opacity:0;
 transform:translateY(40px);
 }
-
 to{
 opacity:1;
 transform:translateY(0);
@@ -255,10 +330,24 @@ padding:20px;
 flex-direction:column;
 }
 
+.avatar{
+width:180px;
+height:180px;
+}
+
+.profile-name{
+font-size:28px;
+}
+
+.right h2{
+font-size:28px;
+}
+
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -268,16 +357,23 @@ flex-direction:column;
 <div class="topbar">
 
 <div class="logo">
+
+<img src="images/logo.png" alt="Logo Card Connect">
+
+<div class="logo-text">
 CARD CONNECT
 </div>
 
+</div>
+
 <div class="profile-badge">
-Profil Digital
+<i class="fa-solid fa-id-card"></i>
+ Profil Digital Vérifié
 </div>
 
 </div>
 
-<!-- PROFILE CARD -->
+<!-- PROFILE -->
 
 <div class="profile-card">
 
@@ -285,7 +381,7 @@ Profil Digital
 
 <div class="left">
 
-<img id="profilePhoto" class="avatar">
+<img id="profilePhoto" class="avatar" src="">
 
 <div class="profile-name" id="profileName">
 Chargement...
@@ -296,7 +392,13 @@ Chargement...
 </div>
 
 <div class="status">
-Profil Vérifié
+<i class="fa-solid fa-circle-check"></i>
+ Profil Vérifié
+</div>
+
+<div class="visitor-warning" id="visitorWarning">
+<i class="fa-solid fa-eye"></i>
+ Mode visiteur activé : consultation uniquement.
 </div>
 
 </div>
@@ -335,6 +437,8 @@ Profil Vérifié
 
 </div>
 
+<!-- ACTIONS -->
+
 <div class="actions">
 
 <a id="whatsappBtn" target="_blank">
@@ -351,7 +455,7 @@ Profil Vérifié
 </button>
 </a>
 
-<button class="btn dark">
+<button class="btn dark" onclick="shareProfile()">
 <i class="fa-solid fa-share-nodes"></i>
  Partager Profil
 </button>
@@ -370,61 +474,130 @@ Profil Vérifié
 
 <div class="history-item">
 <i class="fa-solid fa-qrcode"></i>
+
 <div>
 <strong>Carte scannée</strong>
-<p>Aujourd'hui - 09:15</p>
+<p id="scanDate"></p>
 </div>
+
 </div>
 
 <div class="history-item">
 <i class="fa-solid fa-id-card"></i>
+
 <div>
 <strong>Profil consulté</strong>
-<p>Aujourd'hui - 09:17</p>
+<p>Consultation sécurisée du profil</p>
 </div>
+
 </div>
 
 <div class="history-item">
 <i class="fa-solid fa-shield-halved"></i>
+
 <div>
-<strong>Profil sécurisé</strong>
-<p>Protection Card Connect active</p>
-</div>
+<strong>Sécurité active</strong>
+<p>Protection et vérification Card Connect activées</p>
 </div>
 
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 Card Connect — Profil numérique sécurisé
 </div>
 
 </div>
 
 <script>
 
+/* DATE */
+
+const today = new Date();
+
+document.getElementById('scanDate').innerHTML =
+today.toLocaleDateString('fr-FR') + ' - ' +
+today.toLocaleTimeString('fr-FR');
+
+/* MODE VISITEUR */
+
+const scannerRole = localStorage.getItem("scannerRole");
+
+if(scannerRole === "visitor"){
+
+document.getElementById('visitorWarning').style.display = 'block';
+
+}
+
+/* GET PROFILE */
+
 const params = new URLSearchParams(window.location.search);
 
 const profileId = params.get('id');
 
-const individual = JSON.parse(localStorage.getItem('individualProfile'));
+const individual = JSON.parse(
+localStorage.getItem('individualProfile')
+);
+
+/* LOAD PROFILE */
 
 if(individual && individual.id === profileId){
 
-document.getElementById('profilePhoto').src = individual.photo;
+document.getElementById('profilePhoto').src =
+individual.photo || 'images/default-user.png';
 
-document.getElementById('profileName').innerHTML = individual.name;
+document.getElementById('profileName').innerHTML =
+individual.name || 'Nom indisponible';
 
-document.getElementById('profileJob').innerHTML = individual.job;
+document.getElementById('profileJob').innerHTML =
+individual.job || 'Profession indisponible';
 
-document.getElementById('profilePhone').innerHTML = individual.phone;
+document.getElementById('profilePhone').innerHTML =
+individual.phone || 'Non renseigné';
 
-document.getElementById('profileEmail').innerHTML = individual.email;
+document.getElementById('profileEmail').innerHTML =
+individual.email || 'Non renseigné';
 
-document.getElementById('profileAddress').innerHTML = individual.address;
+document.getElementById('profileAddress').innerHTML =
+individual.address || 'Non renseignée';
 
-document.getElementById('profileEmergency').innerHTML = individual.emergency;
+document.getElementById('profileEmergency').innerHTML =
+individual.emergency || 'Non renseigné';
+
+/* CALL */
 
 document.getElementById('callBtn').href =
 `tel:${individual.phone}`;
 
+/* WHATSAPP */
+
 document.getElementById('whatsappBtn').href =
 `https://wa.me/${individual.phone.replace(/\s+/g,'')}`;
+
+}
+
+/* SHARE PROFILE */
+
+function shareProfile(){
+
+if(navigator.share){
+
+navigator.share({
+
+title:'Card Connect',
+text:'Découvrez ce profil Card Connect',
+url:window.location.href
+
+});
+
+}else{
+
+navigator.clipboard.writeText(window.location.href);
+
+alert('Lien du profil copié.');
+
+}
 
 }
 
