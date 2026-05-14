@@ -59,6 +59,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:40px;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .logo{
@@ -67,9 +69,24 @@ font-weight:700;
 color:#2563eb;
 }
 
+.top-right{
+display:flex;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
 .school-badge{
 background:#2563eb;
 color:white;
+padding:12px 20px;
+border-radius:14px;
+font-weight:600;
+}
+
+.mode-badge{
+background:#eff6ff;
+color:#2563eb;
 padding:12px 20px;
 border-radius:14px;
 font-weight:600;
@@ -116,8 +133,6 @@ display:inline-block;
 padding:12px 22px;
 border-radius:50px;
 font-weight:600;
-background:#fef3c7;
-color:#d97706;
 }
 
 .right h2{
@@ -184,6 +199,11 @@ background:#fee2e2;
 color:#dc2626;
 }
 
+.disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
 .history{
 margin-top:40px;
 background:white;
@@ -207,6 +227,16 @@ border-bottom:1px solid #e2e8f0;
 .history-item i{
 font-size:22px;
 color:#2563eb;
+}
+
+.visitor-notice{
+margin-bottom:25px;
+padding:18px;
+border-radius:16px;
+background:#fef3c7;
+color:#92400e;
+font-weight:600;
+display:none;
 }
 
 @keyframes fadeUp{
@@ -244,8 +274,26 @@ flex-direction:column;
 <div class="container">
 
 <div class="topbar">
+
 <div class="logo">CARD CONNECT</div>
-<div class="school-badge">AKILI SCIENCE ACADEMY</div>
+
+<div class="top-right">
+
+<div class="mode-badge" id="modeBadge">
+Mode sécurisé
+</div>
+
+<div class="school-badge">
+AKILI SCIENCE ACADEMY
+</div>
+
+</div>
+
+</div>
+
+<div class="visitor-notice" id="visitorNotice">
+<i class="fa-solid fa-eye"></i>
+ Mode visiteur activé : modification désactivée.
 </div>
 
 <div class="profile-card">
@@ -278,7 +326,7 @@ Chargement...
 
 <div class="actions">
 
-<button class="btn primary" onclick="markRetrieved()">
+<button class="btn primary" id="retrieveBtn" onclick="markRetrieved()">
 <i class="fa-solid fa-check"></i>
  Élève retiré
 </button>
@@ -309,15 +357,7 @@ Chargement...
 <i class="fa-solid fa-qrcode"></i>
 <div>
 <strong>Carte scannée</strong>
-<p>Aujourd'hui - 07:45</p>
-</div>
-</div>
-
-<div class="history-item">
-<i class="fa-solid fa-school"></i>
-<div>
-<strong>Entrée à l'école</strong>
-<p>Aujourd'hui - 07:50</p>
+<p id="scanTime">Chargement...</p>
 </div>
 </div>
 
@@ -329,31 +369,104 @@ Chargement...
 </div>
 </div>
 
+<div class="history-item">
+<i class="fa-solid fa-clock"></i>
+<div>
+<strong>Dernier retrait</strong>
+<p id="lastRetrieved">Aucun retrait</p>
+</div>
+</div>
+
 </div>
 
 </div>
 
 <script>
 
+/* PARAMS */
+
 const params = new URLSearchParams(window.location.search);
 
 const studentId = params.get('id');
 
-let students = JSON.parse(localStorage.getItem('students')) || [];
+const mode = params.get('mode');
 
-const student = students.find(s => s.id === studentId);
+/* MODE */
+
+const modeBadge =
+document.getElementById("modeBadge");
+
+if(mode === "visitor"){
+
+modeBadge.innerHTML =
+'<i class="fa-solid fa-eye"></i> Mode : Visiteur';
+
+document.getElementById("visitorNotice").style.display = "block";
+
+}else{
+
+modeBadge.innerHTML =
+'<i class="fa-solid fa-shield-halved"></i> Mode : Administrateur';
+
+}
+
+/* STUDENTS */
+
+let students =
+JSON.parse(localStorage.getItem('students')) || [];
+
+const student =
+students.find(s => s.id === studentId);
+
+/* DATE TODAY */
+
+const today =
+new Date().toLocaleDateString();
+
+/* AUTO RESET */
 
 if(student){
 
-document.getElementById('studentName').innerHTML = student.name;
+if(student.lastResetDate !== today){
 
-document.getElementById('studentClass').innerHTML = student.classroom;
+student.status = 'Non retiré';
 
-document.getElementById('studentStatus').innerHTML = student.status;
+student.lastResetDate = today;
 
-document.getElementById('historyStatus').innerHTML = student.status;
+const updatedStudents = students.map(s =>
+s.id === student.id ? student : s
+);
 
-document.getElementById('studentPhoto').src = student.photo;
+localStorage.setItem(
+'students',
+JSON.stringify(updatedStudents)
+);
+
+}
+
+}
+
+/* DISPLAY */
+
+if(student){
+
+document.getElementById('studentName').innerHTML =
+student.name;
+
+document.getElementById('studentClass').innerHTML =
+student.classroom;
+
+document.getElementById('studentPhoto').src =
+student.photo;
+
+document.getElementById('historyStatus').innerHTML =
+student.status;
+
+document.getElementById('scanTime').innerHTML =
+new Date().toLocaleString();
+
+document.getElementById('lastRetrieved').innerHTML =
+student.lastRetrieved || 'Aucun retrait';
 
 document.getElementById('infoGrid').innerHTML = `
 
@@ -386,49 +499,93 @@ document.getElementById('infoGrid').innerHTML = `
 document.getElementById('whatsappBtn').href =
 `https://wa.me/${student.parentPhone.replace(/\s/g,'')}`;
 
-if(student.status === 'Retiré'){
+/* STATUS STYLE */
 
-document.getElementById('studentStatus').style.background = '#dcfce7';
+updateStatus(student.status);
 
-document.getElementById('studentStatus').style.color = '#16a34a';
+}
+
+/* UPDATE STATUS */
+
+function updateStatus(status){
+
+const statusBox =
+document.getElementById('studentStatus');
+
+statusBox.innerHTML = status;
+
+if(status === 'Retiré'){
+
+statusBox.style.background = '#dcfce7';
+statusBox.style.color = '#16a34a';
 
 }else{
 
-document.getElementById('studentStatus').style.background = '#fef3c7';
+statusBox.style.background = '#fee2e2';
+statusBox.style.color = '#dc2626';
 
-document.getElementById('studentStatus').style.color = '#d97706';
+}
 
 }
 
+/* VISITOR MODE */
+
+if(mode === "visitor"){
+
+const retrieveBtn =
+document.getElementById("retrieveBtn");
+
+retrieveBtn.disabled = true;
+
+retrieveBtn.classList.add("disabled");
+
 }
+
+/* RETRIEVED */
 
 function markRetrieved(){
 
-const status = document.getElementById('studentStatus');
+/* BLOCK VISITOR */
 
-const history = document.getElementById('historyStatus');
+if(mode === "visitor"){
 
-status.innerHTML = 'Retiré';
+alert(
+"Le mode visiteur ne permet pas de modifier le statut."
+);
 
-status.style.background = '#dcfce7';
+return;
 
-status.style.color = '#16a34a';
+}
 
-history.innerHTML = 'Élève retiré avec succès';
-
-if(student){
+const now =
+new Date().toLocaleString();
 
 student.status = 'Retiré';
+
+student.lastRetrieved = now;
+
+updateStatus('Retiré');
+
+document.getElementById('historyStatus').innerHTML =
+'Retiré';
+
+document.getElementById('lastRetrieved').innerHTML =
+now;
+
+/* SAVE */
 
 const updatedStudents = students.map(s =>
 s.id === student.id ? student : s
 );
 
-localStorage.setItem('students', JSON.stringify(updatedStudents));
+localStorage.setItem(
+'students',
+JSON.stringify(updatedStudents)
+);
 
-}
-
-alert('Le statut de l’élève a été mis à jour automatiquement dans le dashboard.');
+alert(
+'Le statut de l’élève a été mis à jour avec succès.'
+);
 
 }
 
