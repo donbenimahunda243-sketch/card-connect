@@ -61,6 +61,7 @@ height:100vh;
 background:linear-gradient(180deg,#2563eb,#1e3a8a);
 padding:30px 20px;
 color:white;
+overflow-y:auto;
 }
 
 .logo{
@@ -97,6 +98,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:40px;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .topbar h1{
@@ -112,6 +115,7 @@ border-radius:14px;
 cursor:pointer;
 font-weight:600;
 transition:0.3s;
+font-family:'Poppins',sans-serif;
 }
 
 .btn:hover{
@@ -187,6 +191,31 @@ border-radius:50%;
 object-fit:cover;
 }
 
+/* STATUS */
+
+.status{
+padding:8px 14px;
+border-radius:30px;
+font-size:14px;
+font-weight:600;
+display:inline-block;
+}
+
+.active{
+background:#dcfce7;
+color:#16a34a;
+}
+
+.absent{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.mission{
+background:#fef3c7;
+color:#d97706;
+}
+
 /* ACTIONS */
 
 .action-btn{
@@ -196,6 +225,11 @@ border-radius:10px;
 cursor:pointer;
 margin-right:8px;
 font-weight:600;
+transition:0.3s;
+}
+
+.action-btn:hover{
+transform:translateY(-2px);
 }
 
 .view{
@@ -236,6 +270,8 @@ border-radius:24px;
 width:100%;
 max-width:550px;
 animation:fadeUp 0.4s ease;
+max-height:90vh;
+overflow-y:auto;
 }
 
 .modal-content h2{
@@ -258,10 +294,6 @@ select:focus{
 border-color:#2563eb;
 }
 
-.photo-upload{
-margin-bottom:20px;
-}
-
 .link-box{
 background:#eff6ff;
 padding:15px;
@@ -270,7 +302,7 @@ word-break:break-all;
 margin-top:20px;
 }
 
-/* ANIMATIONS */
+/* ANIMATION */
 
 @keyframes fadeUp{
 from{
@@ -295,6 +327,7 @@ height:auto;
 
 .main{
 margin-left:0;
+padding:20px;
 }
 
 }
@@ -397,9 +430,7 @@ margin-left:0;
 
 <h2>Ajouter un personnel</h2>
 
-<div class="photo-upload">
 <input type="file" id="photo" accept="image/*">
-</div>
 
 <input type="text" id="name" placeholder="Nom complet">
 
@@ -412,8 +443,8 @@ margin-left:0;
 <input type="email" id="email" placeholder="Email">
 
 <select id="status">
-<option>Actif</option>
 <option>Absent</option>
+<option>Actif</option>
 <option>En mission</option>
 </select>
 
@@ -433,7 +464,7 @@ Enregistrer
 
 <h2>Lien du profil</h2>
 
-<p>Utilisez ce lien pour le QR Code.</p>
+<p>Compatible QR Code mobile et scanners physiques.</p>
 
 <div class="link-box" id="qrLink"></div>
 
@@ -454,9 +485,55 @@ const totalEmployees = document.getElementById('totalEmployees');
 
 let employees = JSON.parse(localStorage.getItem('employees')) || [];
 
-function saveEmployees(){
+/* RESET JOURNALIER */
+
+const today = new Date().toLocaleDateString();
+
+const lastReset = localStorage.getItem('employeeStatusResetDate');
+
+if(lastReset !== today){
+
+employees = employees.map(employee => ({
+
+...employee,
+status:'Absent'
+
+}));
+
 localStorage.setItem('employees', JSON.stringify(employees));
+
+localStorage.setItem('employeeStatusResetDate', today);
+
 }
+
+/* SAVE */
+
+function saveEmployees(){
+
+localStorage.setItem(
+'employees',
+JSON.stringify(employees)
+);
+
+}
+
+/* STATUS COLORS */
+
+function getStatusClass(status){
+
+if(status === 'Actif'){
+return 'active';
+}
+
+if(status === 'En mission'){
+return 'mission';
+}
+
+return 'absent';
+
+}
+
+/* RENDER */
 
 function renderEmployees(){
 
@@ -477,8 +554,14 @@ const row = `
 </td>
 
 <td>${employee.department}</td>
+
 <td>${employee.position}</td>
-<td>${employee.status}</td>
+
+<td>
+<span class="status ${getStatusClass(employee.status)}">
+${employee.status}
+</span>
+</td>
 
 <td>
 
@@ -507,35 +590,68 @@ totalEmployees.innerHTML = employees.length;
 
 }
 
+/* OPEN MODAL */
+
 function openModal(){
+
 document.getElementById('modal').style.display = 'flex';
+
 }
+
+/* CLOSE MODALS */
 
 window.onclick = function(e){
 
 if(e.target == document.getElementById('modal')){
+
 document.getElementById('modal').style.display = 'none';
+
 }
 
 if(e.target == document.getElementById('qrModal')){
+
 document.getElementById('qrModal').style.display = 'none';
+
 }
 
 }
+
+/* ADD EMPLOYEE */
 
 function addEmployee(){
 
 const photoInput = document.getElementById('photo');
 
 const name = document.getElementById('name').value;
+
 const department = document.getElementById('department').value;
+
 const position = document.getElementById('position').value;
+
 const phone = document.getElementById('phone').value;
+
 const email = document.getElementById('email').value;
+
 const status = document.getElementById('status').value;
 
-if(name === '' || department === '' || position === ''){
+if(
+name === '' ||
+department === '' ||
+position === ''
+){
+
+alert('Veuillez remplir les champs.');
+
 return;
+
+}
+
+if(!photoInput.files[0]){
+
+alert('Veuillez sélectionner une photo.');
+
+return;
+
 }
 
 const reader = new FileReader();
@@ -545,27 +661,38 @@ reader.onload = function(e){
 const employee = {
 
 id: Math.random().toString(36).substr(2,9),
+
 photo: e.target.result,
+
 name,
 department,
 position,
 phone,
 email,
-status
+status,
+
+createdDate: today
 
 };
 
 employees.push(employee);
 
 saveEmployees();
+
 renderEmployees();
 
 document.getElementById('modal').style.display = 'none';
 
+document.getElementById('photo').value = '';
+
 document.getElementById('name').value = '';
+
 document.getElementById('department').value = '';
+
 document.getElementById('position').value = '';
+
 document.getElementById('phone').value = '';
+
 document.getElementById('email').value = '';
 
 };
@@ -574,14 +701,23 @@ reader.readAsDataURL(photoInput.files[0]);
 
 }
 
+/* DELETE */
+
 function deleteEmployee(index){
+
+if(confirm('Supprimer ce personnel ?')){
 
 employees.splice(index,1);
 
 saveEmployees();
+
 renderEmployees();
 
 }
+
+}
+
+/* VIEW */
 
 function viewEmployee(index){
 
@@ -589,20 +725,33 @@ const employee = employees[index];
 
 alert(
 `Nom : ${employee.name}
+
 Département : ${employee.department}
+
 Fonction : ${employee.position}
+
 Téléphone : ${employee.phone}
+
 Email : ${employee.email}
+
 Statut : ${employee.status}`
 );
 
 }
 
+/* QR LINK */
+
 function generateLink(index){
 
 const employee = employees[index];
 
-const link = `employee-profile.html?id=${employee.id}`;
+const link =
+window.location.origin +
+window.location.pathname.replace(
+'entreprise-dashboard.html',
+'employee-profile.html'
+) +
+`?id=${employee.id}`;
 
 document.getElementById('qrLink').innerHTML = link;
 
@@ -610,11 +759,15 @@ document.getElementById('qrModal').style.display = 'flex';
 
 }
 
+/* CLOSE QR */
+
 function closeQrModal(){
 
 document.getElementById('qrModal').style.display = 'none';
 
 }
+
+/* INIT */
 
 renderEmployees();
 
