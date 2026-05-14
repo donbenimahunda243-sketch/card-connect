@@ -48,6 +48,8 @@ left:-150px;
 z-index:-1;
 }
 
+/* SIDEBAR */
+
 .sidebar{
 position:fixed;
 left:0;
@@ -57,6 +59,7 @@ height:100vh;
 background:linear-gradient(180deg,#2563eb,#1e3a8a);
 color:white;
 padding:30px 20px;
+overflow-y:auto;
 }
 
 .logo{
@@ -81,6 +84,8 @@ transition:0.3s;
 background:rgba(255,255,255,0.12);
 }
 
+/* MAIN */
+
 .main{
 margin-left:260px;
 padding:40px;
@@ -91,10 +96,17 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:40px;
+gap:20px;
+flex-wrap:wrap;
 }
 
 .topbar h1{
 font-size:34px;
+margin-bottom:8px;
+}
+
+.topbar p{
+color:#64748b;
 }
 
 .btn{
@@ -106,12 +118,15 @@ border-radius:14px;
 cursor:pointer;
 font-weight:600;
 transition:0.3s;
+font-family:'Poppins',sans-serif;
 }
 
 .btn:hover{
 background:#1e3a8a;
 transform:translateY(-2px);
 }
+
+/* STATS */
 
 .stats{
 display:grid;
@@ -133,11 +148,14 @@ color:#2563eb;
 margin-bottom:15px;
 }
 
+/* TABLE */
+
 .table-box{
 background:white;
 padding:30px;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.05);
+overflow-x:auto;
 }
 
 .table-header{
@@ -150,17 +168,47 @@ margin-bottom:25px;
 table{
 width:100%;
 border-collapse:collapse;
+min-width:900px;
 }
 
 th{
 text-align:left;
 padding:15px;
 background:#eff6ff;
+font-size:14px;
 }
 
 td{
 padding:15px;
 border-bottom:1px solid #e2e8f0;
+font-size:14px;
+vertical-align:middle;
+}
+
+.student-photo{
+width:55px;
+height:55px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #dbeafe;
+}
+
+.status-badge{
+padding:10px 16px;
+border-radius:50px;
+font-size:13px;
+font-weight:600;
+display:inline-block;
+}
+
+.not-retrieved{
+background:#fef3c7;
+color:#d97706;
+}
+
+.retrieved{
+background:#dcfce7;
+color:#16a34a;
 }
 
 .action-btn{
@@ -170,6 +218,11 @@ border-radius:10px;
 cursor:pointer;
 margin-right:8px;
 font-weight:600;
+transition:0.3s;
+}
+
+.action-btn:hover{
+transform:translateY(-2px);
 }
 
 .view{
@@ -187,6 +240,13 @@ background:#dcfce7;
 color:#16a34a;
 }
 
+.copy{
+background:#ede9fe;
+color:#7c3aed;
+}
+
+/* MODALS */
+
 .modal{
 display:none;
 position:fixed;
@@ -198,6 +258,7 @@ background:rgba(0,0,0,0.5);
 justify-content:center;
 align-items:center;
 padding:20px;
+z-index:999;
 }
 
 .modal-content{
@@ -205,7 +266,7 @@ background:white;
 padding:40px;
 border-radius:24px;
 width:100%;
-max-width:500px;
+max-width:550px;
 animation:fadeUp 0.4s ease;
 max-height:90vh;
 overflow-y:auto;
@@ -215,13 +276,21 @@ overflow-y:auto;
 margin-bottom:25px;
 }
 
-input,select{
+input,
+select{
 width:100%;
 padding:15px;
 margin-bottom:20px;
 border-radius:12px;
 border:1px solid #cbd5e1;
 font-family:'Poppins',sans-serif;
+font-size:15px;
+outline:none;
+}
+
+input:focus,
+select:focus{
+border-color:#2563eb;
 }
 
 .link-box{
@@ -230,7 +299,23 @@ padding:15px;
 border-radius:12px;
 word-break:break-all;
 margin-top:20px;
+line-height:1.7;
 }
+
+.qr-preview{
+margin-top:20px;
+text-align:center;
+}
+
+.qr-preview img{
+width:220px;
+padding:15px;
+background:white;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* ANIMATION */
 
 @keyframes fadeUp{
 from{
@@ -244,6 +329,8 @@ transform:translateY(0);
 }
 }
 
+/* RESPONSIVE */
+
 @media(max-width:900px){
 
 .sidebar{
@@ -254,10 +341,12 @@ height:auto;
 
 .main{
 margin-left:0;
+padding:20px;
 }
 
-.table-box{
-overflow-x:auto;
+.topbar{
+flex-direction:column;
+align-items:flex-start;
 }
 
 }
@@ -266,22 +355,44 @@ overflow-x:auto;
 </head>
 <body>
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
 <div class="logo">CARD CONNECT</div>
 
 <div class="menu">
-<a href="#"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-<a href="#"><i class="fa-solid fa-users"></i> Élèves</a>
-<a href="#"><i class="fa-solid fa-qrcode"></i> QR Scan</a>
-<a href="#"><i class="fa-solid fa-school"></i> AKILI SCHOOL</a>
+
+<a href="#">
+<i class="fa-solid fa-table-columns"></i>
+Dashboard
+</a>
+
+<a href="#">
+<i class="fa-solid fa-users"></i>
+Élèves
+</a>
+
+<a href="scanner.html">
+<i class="fa-solid fa-qrcode"></i>
+QR Scan
+</a>
+
+<a href="#">
+<i class="fa-solid fa-school"></i>
+AKILI SCHOOL
+</a>
+
 </div>
 
 </div>
+
+<!-- MAIN -->
 
 <div class="main">
 
 <div class="topbar">
+
 <div>
 <h1>AKILI SCIENCE ACADEMY</h1>
 <p>Administration scolaire intelligente</p>
@@ -291,7 +402,10 @@ overflow-x:auto;
 <i class="fa-solid fa-plus"></i>
  Ajouter un élève
 </button>
+
 </div>
+
+<!-- STATS -->
 
 <div class="stats">
 
@@ -302,18 +416,20 @@ overflow-x:auto;
 </div>
 
 <div class="stat-card">
-<i class="fa-solid fa-qrcode"></i>
-<h2>QR Smart</h2>
-<p>Cartes intelligentes</p>
+<i class="fa-solid fa-user-check"></i>
+<h2 id="retrievedStudents">0</h2>
+<p>Élèves retirés aujourd'hui</p>
 </div>
 
 <div class="stat-card">
 <i class="fa-solid fa-shield-halved"></i>
-<h2>Secure</h2>
+<h2>100%</h2>
 <p>Système sécurisé</p>
 </div>
 
 </div>
+
+<!-- TABLE -->
 
 <div class="table-box">
 
@@ -322,17 +438,21 @@ overflow-x:auto;
 </div>
 
 <table>
+
 <thead>
+
 <tr>
+<th>Photo</th>
 <th>Nom</th>
 <th>Classe</th>
+<th>Code Élève</th>
 <th>Statut</th>
 <th>Actions</th>
 </tr>
+
 </thead>
 
-<tbody id="studentTable">
-</tbody>
+<tbody id="studentTable"></tbody>
 
 </table>
 
@@ -340,9 +460,10 @@ overflow-x:auto;
 
 </div>
 
-<!-- MODAL AJOUT ÉLÈVE -->
+<!-- MODAL AJOUT -->
 
 <div class="modal" id="modal">
+
 <div class="modal-content">
 
 <h2>Ajouter un élève</h2>
@@ -367,50 +488,129 @@ Enregistrer
 </button>
 
 </div>
+
 </div>
 
 <!-- MODAL QR -->
 
 <div class="modal" id="qrModal">
+
 <div class="modal-content">
 
-<h2>Lien de Scan</h2>
+<h2>QR Code & Lien sécurisé</h2>
 
-<p>Partagez ce lien avec le QR code de la carte.</p>
+<p>
+Scannez ce QR Code avec un téléphone ou un lecteur QR USB.
+</p>
 
 <div class="link-box" id="qrLink"></div>
 
+<div class="qr-preview">
+<img id="qrImage">
+</div>
+
 <br>
+
+<button class="btn" onclick="copyLink()">
+<i class="fa-solid fa-copy"></i>
+ Copier le lien
+</button>
+
+<br><br>
 
 <button class="btn" onclick="closeQrModal()">
 Fermer
 </button>
 
 </div>
+
 </div>
 
 <script>
 
+/* RESET AUTOMATIQUE CHAQUE JOUR */
+
+const today = new Date().toDateString();
+
+const lastReset = localStorage.getItem("studentStatusDate");
+
+if(lastReset !== today){
+
+let resetStudents = JSON.parse(localStorage.getItem('students')) || [];
+
+resetStudents = resetStudents.map(student => {
+
+student.status = 'Non retiré';
+
+return student;
+
+});
+
+localStorage.setItem('students', JSON.stringify(resetStudents));
+
+localStorage.setItem('studentStatusDate', today);
+
+}
+
+/* VARIABLES */
+
 const table = document.getElementById('studentTable');
+
 const totalStudents = document.getElementById('totalStudents');
+
+const retrievedStudents = document.getElementById('retrievedStudents');
 
 let students = JSON.parse(localStorage.getItem('students')) || [];
 
+/* SAVE */
+
 function saveStudents(){
+
 localStorage.setItem('students', JSON.stringify(students));
+
 }
+
+/* RENDER */
 
 function renderStudents(){
 
 table.innerHTML = '';
 
+let retrievedCount = 0;
+
 students.forEach((student,index)=>{
 
+if(student.status === 'Retiré'){
+
+retrievedCount++;
+
+}
+
+const statusClass =
+student.status === 'Retiré'
+? 'retrieved'
+: 'not-retrieved';
+
 const row = `
+
 <tr>
+
+<td>
+<img src="${student.photo}" class="student-photo">
+</td>
+
 <td>${student.name}</td>
+
 <td>${student.classroom}</td>
-<td>${student.status}</td>
+
+<td>${student.studentCode}</td>
+
+<td>
+<span class="status-badge ${statusClass}">
+${student.status}
+</span>
+</td>
+
 <td>
 
 <button class="action-btn view" onclick="viewStudent(${index})">
@@ -418,6 +618,10 @@ const row = `
 </button>
 
 <button class="action-btn qr" onclick="generateLink(${index})">
+<i class="fa-solid fa-qrcode"></i>
+</button>
+
+<button class="action-btn copy" onclick="copyProfileLink(${index})">
 <i class="fa-solid fa-link"></i>
 </button>
 
@@ -426,7 +630,9 @@ const row = `
 </button>
 
 </td>
+
 </tr>
+
 `;
 
 table.innerHTML += row;
@@ -435,35 +641,59 @@ table.innerHTML += row;
 
 totalStudents.innerHTML = students.length;
 
+retrievedStudents.innerHTML = retrievedCount;
+
 }
 
+/* OPEN MODAL */
+
 function openModal(){
+
 document.getElementById('modal').style.display = 'flex';
+
 }
+
+/* CLOSE */
 
 window.onclick = function(e){
 
 if(e.target == document.getElementById('modal')){
+
 document.getElementById('modal').style.display = 'none';
+
 }
 
 if(e.target == document.getElementById('qrModal')){
+
 document.getElementById('qrModal').style.display = 'none';
+
 }
 
 }
+
+/* ADD STUDENT */
 
 function addStudent(){
 
 const name = document.getElementById('name').value;
+
 const classroom = document.getElementById('classroom').value;
+
 const parentPhone = document.getElementById('parentPhone').value;
+
 const address = document.getElementById('address').value;
+
 const status = document.getElementById('status').value;
 
 const photoInput = document.getElementById('photo');
 
-if(name === '' || classroom === '') return;
+if(name === '' || classroom === ''){
+
+alert('Veuillez remplir les champs.');
+
+return;
+
+}
 
 const reader = new FileReader();
 
@@ -488,6 +718,7 @@ id: Math.random().toString(36).substr(2,9)
 students.push(student);
 
 saveStudents();
+
 renderStudents();
 
 document.getElementById('modal').style.display = 'none';
@@ -498,6 +729,8 @@ document.getElementById('parentPhone').value = '';
 document.getElementById('address').value = '';
 document.getElementById('photo').value = '';
 
+alert('Élève ajouté avec succès.');
+
 };
 
 if(photoInput.files[0]){
@@ -506,56 +739,94 @@ reader.readAsDataURL(photoInput.files[0]);
 
 }else{
 
-alert('Veuillez sélectionner une photo');
+alert('Veuillez sélectionner une photo.');
 
 }
 
 }
+
+/* DELETE */
 
 function deleteStudent(index){
+
+if(confirm('Supprimer cet élève ?')){
 
 students.splice(index,1);
 
 saveStudents();
+
 renderStudents();
 
 }
+
+}
+
+/* VIEW */
 
 function viewStudent(index){
 
 const student = students[index];
 
-alert(
-`Nom : ${student.name}
-
-Classe : ${student.classroom}
-
-Téléphone Parent : ${student.parentPhone}
-
-Adresse : ${student.address}
-
-Statut : ${student.status}
-
-ID : ${student.studentCode}`
-);
+window.location.href =
+`student-profile.html?id=${student.id}`;
 
 }
+
+/* GENERATE QR */
 
 function generateLink(index){
 
 const student = students[index];
 
-const link = `https://card-connect.vercel.app/student-profile.html?id=${student.id}`;
+const fullLink =
+`${window.location.origin}/student-profile.html?id=${student.id}`;
 
-document.getElementById('qrLink').innerHTML = link;
+document.getElementById('qrLink').innerHTML = fullLink;
+
+document.getElementById('qrImage').src =
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullLink)}`;
 
 document.getElementById('qrModal').style.display = 'flex';
 
 }
 
-function closeQrModal(){
-document.getElementById('qrModal').style.display = 'none';
+/* COPY PROFILE LINK */
+
+function copyProfileLink(index){
+
+const student = students[index];
+
+const fullLink =
+`${window.location.origin}/student-profile.html?id=${student.id}`;
+
+navigator.clipboard.writeText(fullLink);
+
+alert('Lien du profil copié.');
+
 }
+
+/* COPY QR MODAL LINK */
+
+function copyLink(){
+
+const link =
+document.getElementById('qrLink').innerText;
+
+navigator.clipboard.writeText(link);
+
+alert('Lien copié.');
+
+}
+
+/* CLOSE QR */
+
+function closeQrModal(){
+
+document.getElementById('qrModal').style.display = 'none';
+
+}
+
+/* START */
 
 renderStudents();
 
