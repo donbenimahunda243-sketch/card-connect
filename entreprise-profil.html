@@ -65,6 +65,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:40px;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .logo{
@@ -73,9 +75,24 @@ font-weight:700;
 color:#2563eb;
 }
 
+.top-right{
+display:flex;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
 .company-badge{
 background:#2563eb;
 color:white;
+padding:12px 20px;
+border-radius:14px;
+font-weight:600;
+}
+
+.mode-badge{
+background:#eff6ff;
+color:#2563eb;
 padding:12px 20px;
 border-radius:14px;
 font-weight:600;
@@ -124,8 +141,6 @@ display:inline-block;
 padding:12px 22px;
 border-radius:50px;
 font-weight:600;
-background:#dcfce7;
-color:#16a34a;
 }
 
 .right h2{
@@ -194,6 +209,11 @@ background:#fee2e2;
 color:#dc2626;
 }
 
+.disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
 /* HISTORY */
 
 .history{
@@ -219,6 +239,16 @@ border-bottom:1px solid #e2e8f0;
 .history-item i{
 font-size:22px;
 color:#2563eb;
+}
+
+.visitor-notice{
+margin-bottom:25px;
+padding:18px;
+border-radius:16px;
+background:#fef3c7;
+color:#92400e;
+font-weight:600;
+display:none;
 }
 
 /* ANIMATION */
@@ -264,10 +294,23 @@ flex-direction:column;
 
 <div class="logo">CARD CONNECT</div>
 
+<div class="top-right">
+
+<div class="mode-badge" id="modeBadge">
+Mode sécurisé
+</div>
+
 <div class="company-badge">
 Entreprise Connectée
 </div>
 
+</div>
+
+</div>
+
+<div class="visitor-notice" id="visitorNotice">
+<i class="fa-solid fa-eye"></i>
+ Mode visiteur activé : modification désactivée.
 </div>
 
 <!-- PROFILE -->
@@ -306,7 +349,7 @@ Chargement...
 
 <div class="actions">
 
-<button class="btn primary" onclick="markPresent()">
+<button class="btn primary" id="presentBtn" onclick="markPresent()">
 <i class="fa-solid fa-check"></i>
  Personnel présent
 </button>
@@ -339,15 +382,7 @@ Chargement...
 <i class="fa-solid fa-qrcode"></i>
 <div>
 <strong>Carte scannée</strong>
-<p>Aujourd'hui - 08:10</p>
-</div>
-</div>
-
-<div class="history-item">
-<i class="fa-solid fa-building"></i>
-<div>
-<strong>Accès entreprise</strong>
-<p>Aujourd'hui - 08:15</p>
+<p id="scanTime">Chargement...</p>
 </div>
 </div>
 
@@ -359,31 +394,104 @@ Chargement...
 </div>
 </div>
 
+<div class="history-item">
+<i class="fa-solid fa-clock"></i>
+<div>
+<strong>Dernière présence</strong>
+<p id="lastPresent">Aucune présence enregistrée</p>
+</div>
+</div>
+
 </div>
 
 </div>
 
 <script>
 
+/* PARAMS */
+
 const params = new URLSearchParams(window.location.search);
 
 const employeeId = params.get('id');
 
-let employees = JSON.parse(localStorage.getItem('employees')) || [];
+const mode = params.get('mode');
 
-const employee = employees.find(e => e.id === employeeId);
+/* MODE */
+
+const modeBadge =
+document.getElementById("modeBadge");
+
+if(mode === "visitor"){
+
+modeBadge.innerHTML =
+'<i class="fa-solid fa-eye"></i> Mode : Visiteur';
+
+document.getElementById("visitorNotice").style.display = "block";
+
+}else{
+
+modeBadge.innerHTML =
+'<i class="fa-solid fa-shield-halved"></i> Mode : Administrateur';
+
+}
+
+/* EMPLOYEES */
+
+let employees =
+JSON.parse(localStorage.getItem('employees')) || [];
+
+const employee =
+employees.find(e => e.id === employeeId);
+
+/* DATE */
+
+const today =
+new Date().toLocaleDateString();
+
+/* AUTO RESET */
 
 if(employee){
 
-document.getElementById('employeePhoto').src = employee.photo;
+if(employee.lastResetDate !== today){
 
-document.getElementById('employeeName').innerHTML = employee.name;
+employee.status = 'Absent';
 
-document.getElementById('employeePosition').innerHTML = employee.position;
+employee.lastResetDate = today;
 
-document.getElementById('employeeStatus').innerHTML = employee.status;
+const updatedEmployees = employees.map(e =>
+e.id === employee.id ? employee : e
+);
 
-document.getElementById('historyStatus').innerHTML = employee.status;
+localStorage.setItem(
+'employees',
+JSON.stringify(updatedEmployees)
+);
+
+}
+
+}
+
+/* DISPLAY */
+
+if(employee){
+
+document.getElementById('employeePhoto').src =
+employee.photo;
+
+document.getElementById('employeeName').innerHTML =
+employee.name;
+
+document.getElementById('employeePosition').innerHTML =
+employee.position;
+
+document.getElementById('historyStatus').innerHTML =
+employee.status;
+
+document.getElementById('scanTime').innerHTML =
+new Date().toLocaleString();
+
+document.getElementById('lastPresent').innerHTML =
+employee.lastPresent || 'Aucune présence enregistrée';
 
 document.getElementById('infoGrid').innerHTML = `
 
@@ -416,56 +524,94 @@ document.getElementById('infoGrid').innerHTML = `
 document.getElementById('phoneBtn').href =
 `tel:${employee.phone}`;
 
-if(employee.status === 'Actif'){
-
-document.getElementById('employeeStatus').style.background = '#dcfce7';
-document.getElementById('employeeStatus').style.color = '#16a34a';
+updateStatus(employee.status);
 
 }
 
-if(employee.status === 'Absent'){
+/* STATUS */
 
-document.getElementById('employeeStatus').style.background = '#fee2e2';
-document.getElementById('employeeStatus').style.color = '#dc2626';
+function updateStatus(status){
+
+const statusBox =
+document.getElementById('employeeStatus');
+
+statusBox.innerHTML = status;
+
+if(status === 'Actif'){
+
+statusBox.style.background = '#dcfce7';
+statusBox.style.color = '#16a34a';
+
+}else if(status === 'En mission'){
+
+statusBox.style.background = '#fef3c7';
+statusBox.style.color = '#d97706';
+
+}else{
+
+statusBox.style.background = '#fee2e2';
+statusBox.style.color = '#dc2626';
 
 }
 
-if(employee.status === 'En mission'){
+}
 
-document.getElementById('employeeStatus').style.background = '#fef3c7';
-document.getElementById('employeeStatus').style.color = '#d97706';
+/* VISITOR MODE */
+
+if(mode === "visitor"){
+
+const presentBtn =
+document.getElementById("presentBtn");
+
+presentBtn.disabled = true;
+
+presentBtn.classList.add("disabled");
 
 }
 
-}
+/* MARK PRESENT */
 
 function markPresent(){
 
-const status = document.getElementById('employeeStatus');
+if(mode === "visitor"){
 
-const history = document.getElementById('historyStatus');
+alert(
+"Le mode visiteur ne permet pas de modifier le statut."
+);
 
-status.innerHTML = 'Actif';
+return;
 
-status.style.background = '#dcfce7';
+}
 
-status.style.color = '#16a34a';
-
-history.innerHTML = 'Personnel actif et présent';
-
-if(employee){
+const now =
+new Date().toLocaleString();
 
 employee.status = 'Actif';
+
+employee.lastPresent = now;
+
+updateStatus('Actif');
+
+document.getElementById('historyStatus').innerHTML =
+'Personnel actif et présent';
+
+document.getElementById('lastPresent').innerHTML =
+now;
+
+/* SAVE */
 
 const updatedEmployees = employees.map(e =>
 e.id === employee.id ? employee : e
 );
 
-localStorage.setItem('employees', JSON.stringify(updatedEmployees));
+localStorage.setItem(
+'employees',
+JSON.stringify(updatedEmployees)
+);
 
-}
-
-alert('Le statut du personnel a été synchronisé avec le dashboard entreprise.');
+alert(
+'Le statut du personnel a été synchronisé avec le dashboard entreprise.'
+);
 
 }
 
