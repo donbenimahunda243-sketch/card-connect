@@ -485,6 +485,20 @@ document.getElementById('profileEmergency').innerHTML = individual.emergency;
 
 document.getElementById('profilePhoto').src = individual.photo;
 
+/* PRE-REMPLIR LE FORMULAIRE */
+
+document.getElementById('nameInput').value = individual.name;
+
+document.getElementById('jobInput').value = individual.job;
+
+document.getElementById('phoneInput').value = individual.phone;
+
+document.getElementById('emailInput').value = individual.email;
+
+document.getElementById('addressInput').value = individual.address;
+
+document.getElementById('emergencyInput').value = individual.emergency;
+
 }
 
 function openModal(){
@@ -549,19 +563,25 @@ renderProfile();
 
 document.getElementById('modal').style.display = 'none';
 
+alert('Profil mis à jour avec succès.');
+
 }
 
 function generateLink(){
 
-const link = `individual-profile.html?id=${individual.id}`;
+const link =
+`${window.location.origin}/individual-profile.html?id=${individual.id}`;
 
-document.getElementById('profileLink').innerHTML = link;
+document.getElementById('profileLink').innerHTML = `
+<a href="${link}" target="_blank">${link}</a>
+`;
 
 }
 
 function openProfile(){
 
-window.location.href = `individual-profile.html?id=${individual.id}`;
+window.location.href =
+`individual-profile.html?id=${individual.id}`;
 
 }
 
