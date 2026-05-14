@@ -77,11 +77,20 @@ color:#2563eb;
 display:flex;
 align-items:center;
 gap:15px;
+flex-wrap:wrap;
 }
 
 .secure{
 background:#dcfce7;
 color:#16a34a;
+padding:10px 18px;
+border-radius:14px;
+font-weight:600;
+}
+
+.role-badge{
+background:#eff6ff;
+color:#2563eb;
 padding:10px 18px;
 border-radius:14px;
 font-weight:600;
@@ -144,6 +153,28 @@ border-radius:20px;
 overflow:hidden;
 }
 
+/* USB SCANNER */
+
+#usbScanner{
+position:absolute;
+opacity:0;
+pointer-events:none;
+}
+
+/* STATUS */
+
+.scan-status{
+margin-top:20px;
+padding:15px;
+background:#eff6ff;
+border-radius:16px;
+text-align:center;
+font-weight:600;
+color:#2563eb;
+}
+
+/* RESULT */
+
 .scan-info{
 margin-top:30px;
 padding:25px;
@@ -159,6 +190,7 @@ color:#2563eb;
 
 .scan-info p{
 margin-bottom:8px;
+line-height:1.7;
 }
 
 /* BUTTON */
@@ -180,6 +212,18 @@ font-family:'Poppins',sans-serif;
 
 .btn:hover{
 background:#1e3a8a;
+}
+
+/* VISITOR NOTICE */
+
+.visitor-notice{
+margin-top:20px;
+padding:15px;
+background:#fef3c7;
+color:#92400e;
+border-radius:14px;
+font-weight:600;
+display:none;
 }
 
 /* ANIMATION */
@@ -242,6 +286,10 @@ CARD CONNECT
  Scanner Sécurisé
 </div>
 
+<div class="role-badge" id="roleBadge">
+Mode : Scanner
+</div>
+
 <button class="logout-btn" onclick="logoutScanner()">
 <i class="fa-solid fa-right-from-bracket"></i>
  Déconnexion
@@ -265,9 +313,27 @@ Scannez un QR Code Card Connect pour accéder au profil sécurisé.
 
 <div class="scanner-box">
 
-<!-- SCANNER -->
+<!-- USB QR SCANNER -->
+
+<input type="text" id="usbScanner">
+
+<!-- CAMERA SCANNER -->
 
 <div id="reader"></div>
+
+<!-- STATUS -->
+
+<div class="scan-status">
+<i class="fa-solid fa-camera"></i>
+ Caméra et lecteur QR USB actifs
+</div>
+
+<!-- VISITOR NOTICE -->
+
+<div class="visitor-notice" id="visitorNotice">
+<i class="fa-solid fa-eye"></i>
+ Mode visiteur : consultation uniquement
+</div>
 
 <!-- RESULT -->
 
@@ -304,17 +370,65 @@ window.location.href = "scanner-login.html";
 
 }
 
+/* ROLE */
+
+const scannerRole =
+localStorage.getItem("scannerRole");
+
+/* ROLE DISPLAY */
+
+const roleBadge =
+document.getElementById("roleBadge");
+
+if(scannerRole === "school"){
+
+roleBadge.innerHTML =
+'<i class="fa-solid fa-school"></i> Mode : École';
+
+}
+
+else if(scannerRole === "company"){
+
+roleBadge.innerHTML =
+'<i class="fa-solid fa-building"></i> Mode : Entreprise';
+
+}
+
+else if(scannerRole === "individual"){
+
+roleBadge.innerHTML =
+'<i class="fa-solid fa-user"></i> Mode : Individuel';
+
+}
+
+else if(scannerRole === "visitor"){
+
+roleBadge.innerHTML =
+'<i class="fa-solid fa-eye"></i> Mode : Visiteur';
+
+document.getElementById("visitorNotice").style.display = "block";
+
+}
+
 /* VARIABLES */
 
 let scannedLink = '';
 
 /* SCAN SUCCESS */
 
-function onScanSuccess(decodedText, decodedResult){
+function onScanSuccess(decodedText){
 
-scannedLink = decodedText;
+processScan(decodedText);
 
-/* STOP SCAN */
+}
+
+/* PROCESS SCAN */
+
+function processScan(link){
+
+scannedLink = link;
+
+/* STOP CAMERA */
 
 html5QrcodeScanner.clear();
 
@@ -324,8 +438,8 @@ document.getElementById('scanInfo').style.display = 'block';
 
 document.getElementById('scanResult').innerHTML =
 `
-<b>Lien détecté :</b><br>
-${decodedText}
+<b>Lien détecté :</b><br><br>
+${link}
 `;
 
 }
@@ -348,7 +462,23 @@ document.getElementById('openProfileBtn').addEventListener('click',()=>{
 
 if(scannedLink){
 
-window.location.href = scannedLink;
+/* VISITOR MODE */
+
+if(scannerRole === "visitor"){
+
+window.location.href =
+scannedLink + "?mode=visitor";
+
+}
+
+/* OTHER MODES */
+
+else{
+
+window.location.href =
+scannedLink + "?mode=admin";
+
+}
 
 }
 
@@ -363,6 +493,37 @@ document.getElementById('scanInfo').style.display = 'none';
 html5QrcodeScanner.render(onScanSuccess);
 
 }
+
+/* USB QR SCANNER */
+
+const usbScanner =
+document.getElementById("usbScanner");
+
+usbScanner.focus();
+
+let usbBuffer = '';
+
+document.addEventListener('keydown',(e)=>{
+
+usbScanner.focus();
+
+if(e.key === 'Enter'){
+
+if(usbBuffer.trim() !== ''){
+
+processScan(usbBuffer.trim());
+
+usbBuffer = '';
+
+}
+
+}else{
+
+usbBuffer += e.key;
+
+}
+
+});
 
 /* LOGOUT */
 
