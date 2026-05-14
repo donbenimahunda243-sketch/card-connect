@@ -226,6 +226,18 @@ margin-top:15px;
 font-weight:600;
 }
 
+/* INFO ROLE */
+
+.role-info{
+margin-top:20px;
+padding:15px;
+border-radius:14px;
+background:#eff6ff;
+color:#2563eb;
+font-weight:600;
+display:none;
+}
+
 /* ANIMATIONS */
 
 @keyframes fadeUp{
@@ -308,11 +320,15 @@ Choisissez votre espace sécurisé.
 
 <div class="options">
 
+<!-- ECOLE -->
+
 <div class="option" onclick="selectRole('school')">
 <i class="fa-solid fa-school"></i>
 <h3>Espace École</h3>
 <p>Scanner sécurisé pour établissements scolaires.</p>
 </div>
+
+<!-- ENTREPRISE -->
 
 <div class="option" onclick="selectRole('company')">
 <i class="fa-solid fa-building"></i>
@@ -320,10 +336,20 @@ Choisissez votre espace sécurisé.
 <p>Scanner sécurisé pour entreprises.</p>
 </div>
 
+<!-- INDIVIDUEL -->
+
 <div class="option" onclick="selectRole('individual')">
 <i class="fa-solid fa-user"></i>
 <h3>Espace Individuel</h3>
 <p>Scanner sécurisé personnel.</p>
+</div>
+
+<!-- VISITEUR -->
+
+<div class="option" onclick="visitorAccess()">
+<i class="fa-solid fa-eye"></i>
+<h3>Espace Visiteur</h3>
+<p>Voir les profils sans possibilité de modification.</p>
 </div>
 
 </div>
@@ -343,6 +369,8 @@ Connexion sécurisée
 <button onclick="loginScanner()">
 Connexion au Scanner
 </button>
+
+<div class="role-info" id="roleInfo"></div>
 
 <p id="message"></p>
 
@@ -375,6 +403,49 @@ currentRole = role;
 
 document.getElementById('loginForm').style.display = 'block';
 
+const roleInfo = document.getElementById("roleInfo");
+
+roleInfo.style.display = "block";
+
+if(role === "school"){
+
+roleInfo.innerHTML =
+'<i class="fa-solid fa-school"></i> Connexion École';
+
+}
+
+else if(role === "company"){
+
+roleInfo.innerHTML =
+'<i class="fa-solid fa-building"></i> Connexion Entreprise';
+
+}
+
+else if(role === "individual"){
+
+roleInfo.innerHTML =
+'<i class="fa-solid fa-user"></i> Connexion Individuelle';
+
+}
+
+}
+
+/* ACCES VISITEUR DIRECT */
+
+function visitorAccess(){
+
+localStorage.setItem(
+"scannerAuthenticated",
+"true"
+);
+
+localStorage.setItem(
+"scannerRole",
+"visitor"
+);
+
+window.location.href = "scanner.html";
+
 }
 
 function loginScanner(){
@@ -394,8 +465,6 @@ password === 'akili123'
 
 message.style.color = 'green';
 message.innerHTML = 'Connexion sécurisée réussie...';
-
-/* SESSION */
 
 localStorage.setItem(
 "scannerAuthenticated",
@@ -426,8 +495,6 @@ password === 'company123'
 message.style.color = 'green';
 message.innerHTML = 'Connexion entreprise réussie...';
 
-/* SESSION */
-
 localStorage.setItem(
 "scannerAuthenticated",
 "true"
@@ -456,8 +523,6 @@ password === 'donbeni123'
 
 message.style.color = 'green';
 message.innerHTML = 'Connexion individuelle réussie...';
-
-/* SESSION */
 
 localStorage.setItem(
 "scannerAuthenticated",
